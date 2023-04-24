@@ -1,0 +1,412 @@
+<h2>Nuevo ORGA</h2>
+<hr>
+
+<div class="row">
+    <div class="col">
+        <form (ngSubmit)="guardar()" autocomplete="off" [formGroup]="formularioOrga">
+
+            <!-- Campo de Número de Expediente ORGA-->
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">Número de Expediente ORGA</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" formControlName="numExpOrga" placeholder="ORGA2022XXXXX">
+
+                    <span class="form-text text-danger" *ngIf="campoEsValido('numExpOrga')">
+                        Debe tener el formato ORGA2022XXXXX, (ORGA, AÑO, CINCO DÍGITOS y opcionalmente bis, tris,
+                        etc...)
+                    </span>
+                </div>
+            </div>
+
+            <!-- Fecha inicio ORGA-->
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">Fecha inicio ORGA</label>
+                <div class="col-sm-3">
+                    <mat-form-field appearance="fill" class="fechaInicioORGA">
+                        <mat-label>Introduce un rago de fecha</mat-label>
+                        <mat-date-range-input [rangePicker]="rangePicker" required>
+                            <input matStartDate placeholder="Inicio fecha">
+                            <input matEndDate placeholder="Fin fecha">
+                        </mat-date-range-input>
+                        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                        <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #rangePicker>
+                            <mat-date-range-picker-actions>
+                                <button mat-button matDateRangePickerCancel>Cancel</button>
+                                <button mat-raised-button color="primary" matDateRangePickerApply>Apply</button>
+                            </mat-date-range-picker-actions>
+                        </mat-date-range-picker>
+                    </mat-form-field>
+                </div>
+
+
+            </div>
+
+            <!-- Juzgado-->
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">Juzgado</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" formControlName="juzgado"
+                        placeholder="Juzgado que autoriza el uso del activo">
+
+                    <span class="form-text text-danger" *ngIf="campoEsValido('juzgado')">
+                        El valor es requerido
+                    </span>
+                </div>
+            </div>
+
+            <!-- Provincia del Juzgado-->
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">Provincia del Juzgado</label>
+                <div class="col-sm-9">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Provincia</mat-label>
+                        <mat-select required>
+                            <mat-option *ngFor="let provincia of provincias" [value]="provincia.value">
+                                {{provincia.viewValue}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!-- Procedimiento/Juzgado-->
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">Procedimiento/Diligencias</label>
+                <div class="col-sm-9">
+                    <input type="number" class="form-control" formControlName="procedimientoDiligencias"
+                        placeholder="Procedimiento/Diligencias">
+
+                    <span class="form-text text-danger" *ngIf="campoEsValido('procedimientoDiligencias')">
+                        Procedimiento/Diligencias debe ser un número mayor que 0
+                    </span>
+                </div>
+            </div>
+
+            <!-- Grupo que interviene-->
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">Grupo</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" formControlName="grupo"
+                        placeholder="Grupo que interviene el bien">
+
+                    <span class="form-text text-danger" *ngIf="campoEsValido('grupo')">
+                        Grupo que interviene es obligatorio
+
+                    </span>
+                </div>
+            </div>
+
+            <!-- Fecha de recepción del expediente ORGA-->
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">Fecha de recepción</label>
+                <div class="col-sm-3">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Elige una fecha</mat-label>
+                        <input matInput [matDatepicker]="picker" required>
+                        <mat-hint>MM/DD/YYYY</mat-hint>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <!--  <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle> -->
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!-- Estado el Expediente-->
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">Estado del Expediente</label>
+                <div class="col-sm-9">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Estado</mat-label>
+                        <mat-select required>
+                            <mat-option *ngFor="let estadoExpediente of estadoExpedientes"
+                                [value]="estadoExpediente.value">
+                                {{estadoExpediente.viewValue}}
+                            </mat-option>
+                        </mat-select>
+
+                        <!-- <mat-error *ngIf="formularioOrga.controls['estadoExpediente'].touched">{{"asdf"}}</mat-error> -->
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!--  <mat-form-field appearance="fill">
+                <mat-label>Enter your email</mat-label>
+                <input matInput placeholder="pat@example.com" [formControl]="email" required>
+                <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+              </mat-form-field> -->
+
+            <!-- Uso provisional ya resuelto-->
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">Uso provisional ya resuelto</label>
+                <div class="col-sm-9">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Uso</mat-label>
+                        <mat-select required>
+                            <mat-option *ngFor="let sino of sinos" [value]="sino.value">
+                                {{sino.viewValue}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!-- Observaciones-->
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">Observaciones</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" formControlName="observaciones"
+                        placeholder="Información no contemplada">
+                </div>
+            </div>
+
+            <!-- Número de expediente CNP-->
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">Número de expediente CNP</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" formControlName="numExpCnp" placeholder="CNP2022XXXXX">
+
+                    <span class="form-text text-danger" *ngIf="campoEsValido('numExpCnp')">
+                        Debe tener el formato CNP2022XXXXX, (CNP, AÑO, CINCO DÍGITOS y opcionalmente bis, tris, etc...)
+                    </span>
+                </div>
+            </div>
+
+            <!-- Categoría del activo -->
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">Categoria principal </label>
+                <div class="col-sm-9">
+                    <mat-form-field appearance="fill">
+                        <mat-label> Seleccione Categoria</mat-label>
+                        <mat-select formControlName="categoria" required>
+                            <!-- //[disabled]="categoriaSeleccionada"> -->
+                            <mat-option *ngFor="let categoria of categorias" [value]="categoria | lowercase">
+                                {{categoria}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!-- Inicio Campos de categoría vehículos -->
+            <div *ngIf="subCategorias[0] == 'matricula'; else noEsVehiculo">
+                <!-- Matrícula-->
+                <div class="mb-3 row">
+                    <label class="col-sm-3 col-form-label">Matrícula</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" formControlName="matriculaVehiculo"
+                            placeholder="Matrícula">
+
+                        <span class="form-text text-danger" *ngIf="campoEsValido('matriculaVehiculo')">
+                            Matrícula es obligatorio
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Número de bastidor-->
+                <div class="mb-3 row">
+                    <label class="col-sm-3 col-form-label">Número de bastidor</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" formControlName="numBastidorVehiculo"
+                            placeholder="Número de bastidor">
+
+                        <span class="form-text text-danger" *ngIf="campoEsValido('numBastidorVehiculo')">
+                            Número de bastidor es obligatorio
+
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Marca-->
+                <div class="mb-3 row">
+                    <label class="col-sm-3 col-form-label">Marca</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" formControlName="marcaVehiculo"
+                            placeholder="Marca del vehículo">
+
+                        <span class="form-text text-danger" *ngIf="campoEsValido('marcaVehiculo')">
+                            Marca es obligatorio
+
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Modelo-->
+                <div class="mb-3 row">
+                    <label class="col-sm-3 col-form-label">Modelo</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" formControlName="modeloVehiculo" placeholder="Modelo">
+
+                        <span class="form-text text-danger" *ngIf="campoEsValido('modeloVehiculo')">
+                            Modelo es obligatorio
+
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Versión-->
+                <div class="mb-3 row">
+                    <label class="col-sm-3 col-form-label">Versión</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" formControlName="versionVehiculo" placeholder="Versión">
+
+                        <span class="form-text text-danger" *ngIf="campoEsValido('versionVehiculo')">
+                            Versión es obligatorio
+
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Carburante-->
+                <div class="mb-3 row">
+                    <label class="col-sm-3 col-form-label">Carburante</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" formControlName="carburanteVehiculo"
+                            placeholder="Carburante">
+
+                        <span class="form-text text-danger" *ngIf="campoEsValido('carburanteVehiculo')">
+                            Carburante es obligatorio
+
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Color-->
+                <div class="mb-3 row">
+                    <label class="col-sm-3 col-form-label">Color</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" formControlName="colorVehiculo" placeholder="Color">
+
+                        <span class="form-text text-danger" *ngIf="campoEsValido('colorVehiculo')">
+                            Color es obligatorio
+
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <ng-template #noEsVehiculo>
+
+                <!-- Fin Campos de categoría vehículos -->
+
+
+
+                <!-- Subcategoría del activo-->
+                <div class="mb-3 row" *ngIf="subCategorias.length !== 0">
+                    <div *ngIf="subCategorias[0] == 'marca'; else noEsArma">
+
+                        <div class="mb-3 row" *ngFor="let subCategoria of subCategorias">
+                            <label class="col-sm-3 col-form-label">{{subCategoria}}</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" placeholder="{{subCategoria}}">
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <ng-template #noEsArma>
+
+
+                        <label class="col-sm-3 col-form-label">Subcategoría del activo</label>
+                        <div class="col-sm-9">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Seleccione SubCategoría</mat-label>
+                                <mat-select formControlName="subCategoria">
+                                    <!-- //[disabled]="categoriaSeleccionada"> -->
+                                    <mat-option *ngFor="let subCategoria of subCategorias"
+                                        [value]="subCategoria | lowercase">
+                                        {{subCategoria}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+
+                    </ng-template>
+                </div>
+
+
+
+
+                <!-- subClasificación -->
+                <div class="mb-3 row" *ngIf="subClasificaciones.length !== 0">
+                    <div *ngIf="subClasificaciones[0] == 'raza'; else noEsPerro">
+
+                        <div class="mb-3 row" *ngFor="let subClasificacion of subClasificaciones">
+                            <label class="col-sm-3 col-form-label">{{subClasificacion}}</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" placeholder="{{subClasificacion}}">
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <ng-template #noEsPerro>
+                        3
+                        <label class="col-sm-3 col-form-label">Subclasificación</label>
+                        <div class="col-sm-9">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Seleccione subclasificación</mat-label>
+                                <mat-select formControlName="subClasificacion">
+                                    <!-- //[disabled]="categoriaSeleccionada"> -->
+                                    <mat-option *ngFor="let subClasificacion of subClasificaciones"
+                                        [value]="subClasificacion">
+                                        {{subClasificacion}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </ng-template>
+
+
+                </div>
+
+                <div class="row" *ngIf="cargando">
+                    <div class="col">
+                        <div class="alert aler-primary">
+                            Cargando...
+                        </div>
+                    </div>
+                </div>
+
+            </ng-template>
+
+            <div class="row">
+                <div class="col">
+                    <button mat-raised-button type="submit" class="btn btn-primary float-end">Guardar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- <div class="col-md-4 offset-md-2">
+    <div class="card">
+      <div class="card-body">
+        <form action="">
+          <div class="form-group">
+            <input type="text" name="title" [(ngModel)]="game.title" placeholder="Title" class="form-control" autofocus>
+          </div>
+          <div class="form-group">
+            <textarea name="description" [(ngModel)]="game.description" rows="2" placeholder="Description" class="form-control"></textarea>
+          </div>
+          <div class="form-group">
+            <input type="url" name="image URL" [(ngModel)]="game.image" placeholder="Image" class="form-control">
+          </div>
+          <button class="btn btn-success btn-block" (click)="saveNewGame()">
+            Save
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-4">
+    <div class="card card-body text-center">
+    <img [src]="game.image == '' ? '/assets/noimage.png' : game.image" alt="No Image" class="card-img-top">
+      <h3>{{game.id}}. {{game.title == '' ? 'Game Title' : game.title}}</h3>
+      <p>{{game.description == '' ? 'Write your Descrition' : game.description}}</p>
+      <p>{{game.created_at | date: 'yyyy-MM-dd'}}</p>
+    </div>
+  </div>
+ -->
